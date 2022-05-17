@@ -1,10 +1,15 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
-def uniconBin= '/Users/dank/git/github/unicon/bin'
+
+ext.javaMainClass = "edk.jzero.j0"
+
+def uniconBin = '/Users/dank/git/github/unicon/bin'
+def ujzero = "${buildDir}/generated/sources/icn/j0"
 
 repositories {
     mavenCentral()
@@ -19,6 +24,26 @@ test {
     useJUnitPlatform()
 }
 
+def String parser = ""
+
+if (project.hasProperty("parser")) {
+    parser = project.findProperty("parser") ?: "java"
+    println "Parser=${parser}"
+}
+
+if (project.hasProperty("args")) {
+    ext.cmdargs = project.findProperty("args")
+} else {
+    ext.cmdargs = "Hello.java"
+}
+
+task runJava(type: JavaExec) {
+    group = "Execution"
+    description = "Run jzero app using ${parser}"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = javaMainClass
+    args cmdargs.split()
+}
 
 task uflex(type: Exec) {
     workingDir "${projectDir}"
@@ -28,9 +53,9 @@ task uflex(type: Exec) {
     }
 }
 
-task unicon(type:Exec){
+task unicon(type: Exec) {
     workingDir "${projectDir}"
-    commandLine './scripts/unicon.sh', "${uniconBin}", "${projectDir}/src/main/icn", "${projectDir}/src/main/icn/j0","${projectDir}/src/main/icn/javalex"
+    commandLine './scripts/unicon.sh', "${uniconBin}", "${projectDir}/src/main/icn", "${buildDir}"
     doLast {
         println "Finished unicon"
     }
@@ -44,11 +69,11 @@ task jflex(type: Exec) {
     }
 }
 
-task printStuff {
+task printEnv {
     doLast {
         println "Root Dir: ${rootDir}"
         println "Build Dir: ${buildDir}"
         println "Project Dir: ${projectDir}"
-        println "UFlex: ${uflex}"
+        println "Unicon Dir: ${uniconBin}"
     }
 }

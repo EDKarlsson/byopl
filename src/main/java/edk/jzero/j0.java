@@ -8,15 +8,6 @@ public class j0 {
     public static int yylineno, yycolno;
     public static Token yylval, last_token;
 
-//    public j0 (String filename) throws Exception {
-//        lex = new Yylex(new FileReader(filename));
-//        yylineno = yycolno = 1;
-//        int i;
-//        while ((i = lex.yylex()) != Yylex.YYEOF) {
-//            System.out.println("token " + i + ": " + yytext());
-//        }
-//    }
-
     public void run(String filename) throws Exception {
         lex = new Yylex(new FileReader(filename));
         yylineno = yycolno = 1;
