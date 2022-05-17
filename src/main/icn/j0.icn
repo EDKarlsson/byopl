@@ -1,0 +1,71 @@
+global yylineno, yycolno, yylval
+procedure main(argv)
+    j0 := j0()
+    parser := parser(257,258,259,260,261,262,263,264,265,
+                     266, 267,268,269,270,273,274,275,276,
+                     277,278,280,298,300,301,302,303,304,
+                     306,307,256)
+    yyin := open(argv[1]) | stop("usage: Simple2 filename")
+    yylineno := yycolno := 1
+    while i := yylex() do
+        write(yytext, ":", yylval.lineno, " ", i)
+end
+
+class j0()
+    method lexErr(s)
+        stop(s, ": ", yytext)
+    end
+    method scan(cat)
+        yylval := Token(cat, yytext, yylineno, yycolno)
+        yycolno +:= *yytext
+        return cat
+    end
+    method whitespace()
+        yycolno +:= *yytext
+    end
+    method newline()
+        yylineno +:= 1; yycolno := 1
+    end
+    method comment()
+        yytext ? {
+            while tab(find("\n")+1) do newline()
+            yycolno +:= *tab(0)
+        }
+    end
+    method ord(s)
+        return proc("ord",0)(s[1])
+    end
+end
+
+class token(cat, text, lineno, colno, ival, dval, sval)
+    method deEscape(sin)
+        local sout := ""
+        sin := sin[2:-1]
+        sin ? {
+            while c := move(1) do {
+                if c == "\\" then {
+                    if not (c := move(1)) then
+                        j0.lexErr("malformed string literal")
+                    else case c of {
+                        "t":{ sout ||:= "\t" }
+                        "n":{ sout ||:= "\n" }
+                    }
+                }
+                else sout ||:= c
+            }
+        }
+        return sout
+    end
+initially
+    case cat of {
+        parser.INTLIT:      { ival := integer(text) }
+        parser.DOUBLELIT:   { dval := real(text) }
+        parser.STRINGLIT:   { sval := deEscape(text) }
+    }
+end
+record Parser(BREAK,PUBLIC,DOUBLE,ELSE,FOR,IF,INT,RETURN,VOID,
+              WHILE,IDENTIFIER,CLASSNAME,CLASS,STATIC,STRING,
+              BOOL,INTLIT,DOUBLELIT,STRINGLIT,BOOLLIT,
+              NULLVAL,LESSTHANOREQUAL,GREATERTHANOREQUAL,
+              ISEQUALTO,NOTEQUALTO,LOGICALAND,LOGICALOR,
+              INCREMENT,DECREMENT,YYERRCODE)

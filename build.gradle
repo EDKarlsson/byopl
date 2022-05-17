@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+def uniconBin= '/Users/dank/git/github/unicon/bin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+task uflex(type: Exec) {
+    workingDir "${projectDir}"
+    commandLine './scripts/uflex.sh', "${uniconBin}", "${projectDir}/src/main/jflex", "javalex", "${projectDir}/src/main/icn"
+    doLast {
+        println "Finished UFlex"
+    }
+}
+
+task unicon(type:Exec){
+    workingDir "${projectDir}"
+    commandLine './scripts/unicon.sh', "${uniconBin}", "${projectDir}/src/main/icn", "${projectDir}/src/main/icn/j0","${projectDir}/src/main/icn/javalex"
+    doLast {
+        println "Finished unicon"
+    }
+}
+
+task jflex(type: Exec) {
+    workingDir "${projectDir}"
+    commandLine 'jflex', 'src/main/jflex/javalex.flex', '-d', "src/main/java/edk/jzero"
+    doLast {
+        println "Finished JFlex"
+    }
+}
+
+task printStuff {
+    doLast {
+        println "Root Dir: ${rootDir}"
+        println "Build Dir: ${buildDir}"
+        println "Project Dir: ${projectDir}"
+        println "UFlex: ${uflex}"
+    }
+}
