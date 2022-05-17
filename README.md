@@ -1,14 +1,9 @@
-package edk.jzero;
 
-import java.io.StringReader;
+### Issues with book
 
-public class Token {
-    public int cat;
-    public String text;
-    public int lineno, colno, ival;
-    String sval;
-    double dval;
 
+### Mine
+```java
     private String deEscape(String sin) {
         StringBuilder sout = new StringBuilder(sin);
         sin = sin.substring(1, sin.length() - 1);
@@ -33,16 +28,22 @@ public class Token {
         }
         return sout.toString();
     }
+```
 
-    public Token(int c, String s, int ln, int col) {
-        cat = c;
-        text = s;
-        lineno = ln;
-        colno = col;
-        switch (cat) {
-            case Parser.INTLIT -> ival = Integer.parseInt(s);
-            case Parser.DOUBLELIT -> dval = Double.parseDouble(s);
-            case Parser.STRINGLIT -> sval = deEscape(s);
+### Book
+```java
+    private String deEscape(String sin) {
+        String sout = "";
+        sin = String.substring(sin, 1, sin.length() - 1);
+        int i; 
+        ....
+            if (c == '\\') {
+                sin = String.substring(sin, 1);
+        ....
+            } else {
+                sout = sout + c;
+            }
         }
+        return sout;
     }
-}
+```
