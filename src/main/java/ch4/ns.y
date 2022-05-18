@@ -1,6 +1,6 @@
 %{
-import static example.lexer.yylex;
-import static example.yyerror.yyerror;
+import static ch4.lexer.yylex;
+import static ch4.yyerror.yyerror;
 %}
 %token NAME NUMBER
 %%

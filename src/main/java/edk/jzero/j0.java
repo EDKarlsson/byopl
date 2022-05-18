@@ -5,17 +5,18 @@ import java.io.FileReader;
 public class j0 {
     static Yylex lex;
 
+    public static Parser par;
+
     public static int yylineno, yycolno;
-    public static Token yylval, last_token;
+//    public static Token yylval, last_token;
 
     public void run(String filename) throws Exception {
         lex = new Yylex(new FileReader(filename));
+        par = new Parser();
         yylineno = yycolno = 1;
-        int i;
-        while ((i = lex.yylex()) != Yylex.YYEOF) {
-            System.out.println("token " + i + ": " + yytext());
-        }
-
+        count = 0;
+        int i = par.yyparse();
+        
     }
 
     public static void main(String[] argv) throws Exception {
