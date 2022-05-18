@@ -3,33 +3,45 @@ package edk.jzero;
 import java.io.FileReader;
 
 public class j0 {
-    static Yylex lex;
+    static Yylex yylexer;
 
     public static Parser par;
 
-    public static int yylineno, yycolno;
+    public static int yylineno, yycolno, count;
 //    public static Token yylval, last_token;
 
-    public void run(String filename) throws Exception {
-        lex = new Yylex(new FileReader(filename));
-        par = new Parser();
+    public static void main(String[] argv) throws Exception {
+        init(argv[0]);
+        boolean debug = argv.length > 1;
+        par = new Parser(debug);
         yylineno = yycolno = 1;
         count = 0;
         int i = par.yyparse();
-        
-    }
-
-    public static void main(String[] argv) throws Exception {
-        lex = new Yylex(new FileReader(argv[0]));
-        yylineno = yycolno = 1;
-        int i;
-        while ((i = lex.yylex()) != Yylex.YYEOF) {
-            System.out.println("token " + i + ": " + yytext());
+        if (i == 0) {
+            System.out.println("no errors, " + j0.count + " tokens parsed");
         }
     }
 
+    public static void init(String s) throws Exception {
+        yylexer = new Yylex(new FileReader(s));
+    }
+
+    public static int yylex() {
+        int rv = 0;
+        try {
+            return yylexer.yylex();
+        } catch (java.io.IOException ioException) {
+            rv = -1;
+        }
+        return rv;
+    }
+
+    public static int YYEOF() {
+        return Yylex.YYEOF;
+    }
+
     public static String yytext() {
-        return lex.yytext();
+        return yylexer.yytext();
     }
 
     public static void lexErr(String s) {
@@ -39,8 +51,10 @@ public class j0 {
     }
 
     public static int scan(int cat) {
-        last_token = yylval = new Token(cat, yytext(), yylineno, yycolno);
+//        last_token = yylval = new Token(cat, yytext(), yylineno, yycolno);
+        par.yyval = new ParserVal(new Token(cat, yytext(), yylineno, yycolno));
         yycolno += yytext().length();
+        count++;
         return cat;
     }
 
@@ -52,8 +66,10 @@ public class j0 {
         return (short) (s.charAt(0));
     }
 
-    public static boolean newline() {
+    public static void newline() {
         yylineno++;
+        yycolno = 1;
+/*
         yycolno = 1;
         if (last_token != null) {
             switch (last_token.cat) {
@@ -72,6 +88,7 @@ public class j0 {
             }
         }
         return false;
+*/
     }
 
     public static void comment() {

@@ -5,7 +5,7 @@
 %token ISEQUALTO NOTEQUALTO LOGICALAND LOGICALOR
 %token INCREMENT DECREMENT PUBLIC STATIC
 %%
-ClassDecl: PUBLIC CLASS IDENTIFIER ClassBody;
+ClassDecl: PUBLIC CLASS IDENTIFIER ClassBody ;
 ClassBody: '{' ClassBodyDecls '}' | '{' '}' ;
 ClassBodyDecls: ClassBodyDecl | ClassBodyDecls ClassBodyDecl ;
 ClassBodyDecl: FieldDecl | MethodDecl | ConstructorDecl ;
@@ -41,8 +41,6 @@ LocalVarDecl: Type VarDecls ;
 Stmt: Block | ';' | ExprStmt | BreakStmt | ReturnStmt |
       | IfThenStmt | IfThenElseStmt | IfThenElseIfStmt
       | WhileStmt | ForStmt ;
-
-StmtWithoutTrailingSubstatement:
 
 ExprStmt: StmtExpr ';' ;
 

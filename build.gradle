@@ -60,6 +60,16 @@ task unicon(type: Exec) {
     }
 }
 
+task jyacc(type:Exec) {
+    workingDir "${projectDir}/src/main/java/edk/jzero"
+    commandLine 'jyacc', '-Jclass=Parser', '-Jpackage=edk.jzero',
+            '-Jyylex=edk.jzero.j0.yylex','-Jyyerror=edk.jzero.yyerror.yyerror',
+            "${projectDir}/src/main/yacc/j0gram.y"
+    doLast {
+        println "Finished Byacc/J"
+    }
+}
+
 task jflex(type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jflex', 'src/main/jflex/javalex.flex', '-d', "src/main/java/edk/jzero"

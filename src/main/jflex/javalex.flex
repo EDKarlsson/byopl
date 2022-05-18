@@ -7,7 +7,7 @@ package edk.jzero;
 "//".*\r?\n                         {j0.comment();}
 [ \t\r\f ]+                         {j0.whitespace();}
 \n                                  {j0.newline();}
-"break"                             { return j0.scan(edk.jzero.Parser.BREAK);}
+"break"                             { return j0.scan(Parser.BREAK);}
 "double"                            { return j0.scan(Parser.DOUBLE);}
 "else"                              { return j0.scan(Parser.ELSE);}
 "boolit"                            { return j0.scan(Parser.BOOLLIT);}

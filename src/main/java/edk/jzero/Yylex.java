@@ -926,7 +926,7 @@ class Yylex {
             // fall through
           case 94: break;
           case 44:
-            { return j0.scan(edk.jzero.Parser.BREAK);
+            { return j0.scan(Parser.BREAK);
             }
             // fall through
           case 95: break;
