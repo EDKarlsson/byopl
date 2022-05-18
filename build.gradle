@@ -9,7 +9,6 @@ version '1.0-SNAPSHOT'
 ext.javaMainClass = "edk.jzero.j0"
 
 def uniconBin = '/Users/dank/git/github/unicon/bin'
-def ujzero = "${buildDir}/generated/sources/icn/j0"
 
 repositories {
     mavenCentral()
