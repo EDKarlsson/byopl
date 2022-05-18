@@ -1,0 +1,8 @@
+public {
+::: class expected
+public class {
+::: missing class name
+public class h public
+::: { expected
+public class h{public static void m(S a[]){S.o.p("h")}}
+::: semi-colon expected

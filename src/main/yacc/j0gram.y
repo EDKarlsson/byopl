@@ -22,6 +22,7 @@ MethodReturnVal : Type | VOID ;
 MethodDecl: MethodHeader Block ;
 MethodHeader: PUBLIC STATIC MethodReturnVal MethodDeclarator ;
 MethodDeclarator: IDENTIFIER '(' FormalParmListOpt ')' ;
+
 FormalParmListOpt: FormalParmList | ;
 FormalParmList: FormalParm | FormalParmList ',' FormalParm ;
 FormalParm: Type VarDeclarator ;

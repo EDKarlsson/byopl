@@ -1,0 +1,21 @@
+procedure yyerror(s)
+static t, __merr_errors
+initial {
+   t := table(table("syntax error"))
+   __merr_errors := 0
+   }
+
+   if __merr_errors = 0 then write(&errout)
+   else if map(s)== "stack underflow. aborting..." then return
+   __merr_errors +:= 1
+   if __merr_errors > 10 then
+      stop("too many errors, aborting")
+   writes(&errout, \fName, ":")
+   if s == "syntax error" then
+      s := t[statestk[1], yychar]
+   if s == "syntax error" then {
+      s ||:= " (" || statestk[1] ||";"|| yychar || ")"
+      }
+   write(&errout, yylineno, ": # \"", yytext, "\": ", s)
+   return
+end
